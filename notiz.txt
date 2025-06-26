@@ -1,5 +1,0 @@
-Todo:
-
-- sowas wie bil geht nicht, weil beim writing wieder bil geschrieben wird => loop
-- spaces und andere erlauben
-- mail und seq auslagern
