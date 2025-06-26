@@ -1,4 +1,5 @@
 from pynput import keyboard
+import sys
 
 controller = keyboard.Controller()
 
@@ -7,8 +8,8 @@ def write_word(word):
         controller.press(ch)
         controller.release(ch)
 
-def delete_word(word):
-    for i in range(len(word)):
+def backspace(times):
+    for i in range(times):
         controller.press(keyboard.Key.backspace)
         controller.release(keyboard.Key.backspace)
 
@@ -28,62 +29,54 @@ for i in range(len(seq)):
     next.append([seq[i][0], 1])
 
 def check_state(key): 
+    print(next)
     if hasattr(key, 'char') and key is not None:
-        print(next)
         for i in range(len(mail)):
-            if(key.char == next[i][0]):
-                if(next[i][1] == (len(seq[i]))):
-                    delete_word(seq[i])
-                    write_word(mail[i])
-                    next[i][0] = seq[i][0]
-                    next[i][1] = 1
-                else:
+            if key.char == next[i][0]:
+                if(next[i][1] < len(seq[i])):
                     next[i][0] = seq[i][next[i][1]]
-                    next[i][1] += 1
+                next[i][1] += 1
             else: 
                 next[i][0] = seq[i][0]
                 next[i][1] = 1
-                
-        #if(state[0] == 0 and key.char == "b"):
-        #    state[0] += 1
-        #elif(state[0] == 1 and key.char == "i"):
-        #    state[0] += 1
-        #elif(state[0] == 2 and key.char == "l"):
-        #    state[0] += 1
-        #else: 
-        #    state[0] = 0
+    elif key == keyboard.Key.space: 
+        for i in range(len(mail)):
+            if next[i][1] == (len(seq[i])+1):
+                backspace(len(seq[i])+1)
+                write_word(mail[i])
+                next[i][0] = seq[i][0]
+                next[i][1] = 1
 
-        # STATE 1
-
-        #if(state[1] == 0 and key.char == "a"):
-        #    state[1] += 1
-        #elif(state[1] == 1 and key.char == "b"):
-        #    state[1] += 1
-        #elif(state[1] == 2 and key.char == "u"):
-        #    state[1] += 1
-        #elif(state[1] == 3 and key.char == "1"):
-        #    state[1] += 1
-        #elif(state[1] == 4 and key.char == "0"):
-        #    state[1] += 1
-        #else: 
-        #    state[1] = 0
-
-        
-    #elif(state[0] == 3 and key == keyboard.Key.space):
-    #    delete_word(seq[0])
-    #    write_word(mail[0])
-    #    state[0] = 0
 
 def on_press(key):
     check_state(key)
-
-def on_hotKey():
-    return False
-
-#hotkey = keyboard.HotKey(keyboard.HotKey.parse('<ctrl>+<menu>'), on_hotKey())
+    hotkey_exit.press(listener.canonical(key))
+    hotkey_stop_start.press(listener.canonical(key))
 
 def on_release(key):
-    if(key == keyboard.Key.esc):
-        return False
+    hotkey_exit.release(listener.canonical(key))
+    hotkey_stop_start.release(listener.canonical(key))
     
-with keyboard.Listener(on_press=on_press, on_release=on_release) as listener: listener.join()
+def on_hotkey_exit():
+    sys.exit()
+
+
+listener = keyboard.Listener(on_press=on_press, on_release=on_release)
+listener.start()
+stopped = False
+
+def on_hotkey_stop_start():
+    global stopped
+    if(stopped):
+        listener.start()
+    else:
+        print("s")
+        listener.stop()
+
+    stopped = not stopped
+
+
+hotkey_exit = keyboard.HotKey(keyboard.HotKey.parse('<ctrl>+<menu>+<enter>'), on_hotkey_exit)
+hotkey_stop_start = keyboard.HotKey(keyboard.HotKey.parse('<ctrl>+<menu>'), on_hotkey_stop_start)
+
+listener.join()
