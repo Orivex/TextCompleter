@@ -13,12 +13,12 @@ def delete_word(word):
         controller.release(keyboard.Key.backspace)
 
 mail = [
-    "email42@gmail.com"
+    "email42@gmail.com",
     "email44@gmail.com"
     ]
 
 seq = [
-    "em42"
+    "em42",
     "em44"
     ]
 
@@ -29,7 +29,7 @@ for i in range(len(seq)):
 
 def check_state(key): 
     if hasattr(key, 'char') and key is not None:
-
+        print(next)
         for i in range(len(mail)):
             if(key.char == next[i][0]):
                 if(next[i][1] == (len(seq[i]))):
