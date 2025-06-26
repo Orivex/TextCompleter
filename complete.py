@@ -30,8 +30,8 @@ for i in range(len(seq)):
 
 def check_state(key): 
     print(next)
-    if hasattr(key, 'char') and key is not None:
-        for i in range(len(mail)):
+    for i in range(len(mail)):
+        if hasattr(key, 'char') and key is not None:
             if key.char == next[i][0]:
                 if(next[i][1] < len(seq[i])):
                     next[i][0] = seq[i][next[i][1]]
@@ -39,8 +39,7 @@ def check_state(key):
             else: 
                 next[i][0] = seq[i][0]
                 next[i][1] = 1
-    elif key == keyboard.Key.space: 
-        for i in range(len(mail)):
+        elif key == keyboard.Key.space: 
             if next[i][1] == (len(seq[i])+1):
                 backspace(len(seq[i])+1)
                 write_word(mail[i])
@@ -70,7 +69,6 @@ def on_hotkey_stop_start():
     if(stopped):
         listener.start()
     else:
-        print("s")
         listener.stop()
 
     stopped = not stopped
