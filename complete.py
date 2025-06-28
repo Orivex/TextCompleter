@@ -1,5 +1,7 @@
 from pynput import keyboard
 import sys
+from tkinter import *
+from tkinter import ttk as tk
 
 controller = keyboard.Controller()
 
@@ -47,34 +49,48 @@ def check_state(key):
                 next[i][1] = 1
 
 
+
+def for_canonical(f):
+    return lambda k: f(l.canonical(k))
+
+    
+def on_hot_key():
+    print("HOT")
+    sys.exit()
+    root.quit()
+    
+hot_key = keyboard.HotKey(
+    keyboard.HotKey.parse('<ctrl>+<menu>'),
+    on_hot_key)
+
 def on_press(key):
     check_state(key)
-    hotkey_exit.press(listener.canonical(key))
-    hotkey_stop_start.press(listener.canonical(key))
+    on_press_hotkey(key)
 
 def on_release(key):
-    hotkey_exit.release(listener.canonical(key))
-    hotkey_stop_start.release(listener.canonical(key))
+    on_release_hotkey(key)
+
+
+
+
+root = Tk()
+frm = tk.Frame(root)
+frm.grid()
+root.geometry("600x400")
+tk.Label(frm, text="Full Email").grid(column=0, row=0)
+tk.Label(frm, text="Short cut").grid(column=1, row=0)
+cray = 0
+entry = tk.Entry(root, textvariable=cray,font="Arial 10")
+entry.grid(column=0, row=1)
+root.mainloop()
+root.after_cancel(sys.exit())
+
+with keyboard.Listener(
+
     
-def on_hotkey_exit():
-    sys.exit()
+        on_press=on_press,
+        on_release=on_release) as l:
+    on_press_hotkey = for_canonical(hot_key.press)
+    on_release_hotkey = for_canonical(hot_key.release)
 
-
-listener = keyboard.Listener(on_press=on_press, on_release=on_release)
-listener.start()
-stopped = False
-
-def on_hotkey_stop_start():
-    global stopped
-    if(stopped):
-        listener.start()
-    else:
-        listener.stop()
-
-    stopped = not stopped
-
-
-hotkey_exit = keyboard.HotKey(keyboard.HotKey.parse('<ctrl>+<menu>+<enter>'), on_hotkey_exit)
-hotkey_stop_start = keyboard.HotKey(keyboard.HotKey.parse('<ctrl>+<menu>'), on_hotkey_stop_start)
-
-listener.join()
+    l.join()
