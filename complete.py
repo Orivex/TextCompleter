@@ -1,9 +1,9 @@
 from pynput import keyboard
 import sys
-from tkinter import *
-from tkinter import ttk as tk
+import pandas as pd
 
 controller = keyboard.Controller()
+df = pd.read_csv("shortcuts.csv", delimiter="|")
 
 def write_word(word):
     for ch in word:
@@ -15,38 +15,33 @@ def backspace(times):
         controller.press(keyboard.Key.backspace)
         controller.release(keyboard.Key.backspace)
 
-mail = [
-    "email42@gmail.com",
-    "email44@gmail.com"
-    ]
+text = df["text"].tolist()
 
-seq = [
-    "em42",
-    "em44"
-    ]
+shortcut = df["shortcut"].tolist()
 
 next = []
 
-for i in range(len(seq)): 
-    next.append([seq[i][0], 1])
+for i in range(len(shortcut)): 
+    next.append([shortcut[i][0], 1])
 
 def check_state(key): 
-    print(next)
-    for i in range(len(mail)):
+    for i in range(len(text)):
         if hasattr(key, 'char') and key is not None:
             if key.char == next[i][0]:
-                if(next[i][1] < len(seq[i])):
-                    next[i][0] = seq[i][next[i][1]]
+                if(next[i][1] < len(shortcut[i])):
+                    next[i][0] = shortcut[i][next[i][1]]
                 next[i][1] += 1
             else: 
-                next[i][0] = seq[i][0]
+                next[i][0] = shortcut[i][0]
                 next[i][1] = 1
         elif key == keyboard.Key.space: 
-            if next[i][1] == (len(seq[i])+1):
-                backspace(len(seq[i])+1)
-                write_word(mail[i])
-                next[i][0] = seq[i][0]
+            if next[i][1] == (len(shortcut[i])+1):
+                backspace(len(shortcut[i])+1)
+                write_word(text[i])
+                next[i][0] = shortcut[i][0]
                 next[i][1] = 1
+
+    print(next)
 
 
 
@@ -70,26 +65,9 @@ def on_press(key):
 def on_release(key):
     on_release_hotkey(key)
 
-
-
-
-root = Tk()
-frm = tk.Frame(root)
-frm.grid()
-root.geometry("600x400")
-tk.Label(frm, text="Full Email").grid(column=0, row=0)
-tk.Label(frm, text="Short cut").grid(column=1, row=0)
-cray = 0
-entry = tk.Entry(root, textvariable=cray,font="Arial 10")
-entry.grid(column=0, row=1)
-root.mainloop()
-root.after_cancel(sys.exit())
-
 with keyboard.Listener(
-
-    
-        on_press=on_press,
-        on_release=on_release) as l:
+    on_press=on_press,
+    on_release=on_release) as l:
     on_press_hotkey = for_canonical(hot_key.press)
     on_release_hotkey = for_canonical(hot_key.release)
 
