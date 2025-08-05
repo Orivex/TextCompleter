@@ -1,7 +1,7 @@
 from tkinter import *
 from tkinter import messagebox
 from tkinter import ttk as tk
-import sys, os, csv, subprocess, signal, time
+import os, csv, subprocess, signal
 import pandas as pd
 
 root = Tk()
