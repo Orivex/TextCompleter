@@ -9,7 +9,8 @@ root.geometry("800x400")
 root.resizable(False, False)
 root.title("TextCompleter by Blacklight")
 
-file_name = "shortcuts.csv"
+file_name = os.path.join(os.getcwd(), "shortcuts.csv")
+print(file_name)
 
 if not os.path.exists(file_name) or os.path.getsize(file_name) == 0:
     with open(file_name, "a", newline="") as f:
@@ -112,7 +113,11 @@ def toggle_script():
         active = False
 
     else:
-        path = os.path.join(os.getcwd(), "dist_completer", "completer.exe")
+        if(os.name == "nt"):
+            path = os.path.join(os.getcwd(), "dist_windows_completer", "completer.exe")
+        else:
+            path = os.path.join(os.getcwd(), "dist_linux_completer", "completer")
+            
 
         if os.name == "nt":
             script = subprocess.Popen([path], creationflags=subprocess.CREATE_NEW_PROCESS_GROUP)
