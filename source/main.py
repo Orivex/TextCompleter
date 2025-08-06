@@ -94,9 +94,13 @@ def toggle_script():
         if(active):
             script_running = True
             status.set("🤓 ACTIVE 🤓")
+            shortcut_entry.config(state="disabled")
+            text_entry.config(state="disabled")
         else:
             script_running = False
             status.set("😴 INACTIVE 😴")
+            shortcut_entry.config(state="normal")
+            text_entry.config(state="normal")
 
         toggle_btn.config(state="normal")
 
@@ -105,7 +109,8 @@ def toggle_script():
     if(script_running):
 
         if os.name == "nt": # Windows
-            script.send_signal(signal.CTRL_BREAK_EVENT)
+            script.send_signal(signal.CTRL_BREAK_EVENT) # Working with .exe files
+            # script.terminate() # Working with .py files
         else: # Linux, MacOS
             script.terminate()
 
@@ -114,13 +119,15 @@ def toggle_script():
 
     else:
         if(os.name == "nt"):
-            path = os.path.join(os.getcwd(), "completer_windows.exe")
+            path = os.path.join(os.getcwd(), "completer", "completer_windows.exe") # Working with .exe files
+            # path = os.path.join(os.getcwd(), "completer.py") # Working with .py files
         else:
             path = os.path.join(os.getcwd(), "completer_linux")
             
 
         if os.name == "nt":
-            script = subprocess.Popen([path], creationflags=subprocess.CREATE_NEW_PROCESS_GROUP)
+            script = subprocess.Popen([path], creationflags=subprocess.CREATE_NEW_PROCESS_GROUP) # Working with .exe files
+            # script = subprocess.Popen(["python", path], creationflags=subprocess.CREATE_NEW_PROCESS_GROUP) # Working with .py files
         else:
             script = subprocess.Popen([path])
         
@@ -183,7 +190,8 @@ def on_close_window():
     if(script_running and script is not None):
 
         if os.name == "nt":
-            script.send_signal(signal.CTRL_BREAK_EVENT)
+            script.send_signal(signal.CTRL_BREAK_EVENT) # Working with .exe files
+            # script.terminate() # Working .py files
         else:
             script.terminate()
 
