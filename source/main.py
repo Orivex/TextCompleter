@@ -94,11 +94,14 @@ def toggle_script():
         if(active):
             script_running = True
             status.set("🤓 ACTIVE 🤓")
+            add_sh_btn.config(state="disabled")
             shortcut_entry.config(state="disabled")
             text_entry.config(state="disabled")
+            
         else:
             script_running = False
             status.set("😴 INACTIVE 😴")
+            add_sh_btn.config(state="normal")
             shortcut_entry.config(state="normal")
             text_entry.config(state="normal")
 
@@ -122,7 +125,7 @@ def toggle_script():
             path = os.path.join(os.getcwd(), "completer", "completer_windows.exe") # Working with .exe files
             # path = os.path.join(os.getcwd(), "completer.py") # Working with .py files
         else:
-            path = os.path.join(os.getcwd(), "completer_linux")
+            path = os.path.join(os.getcwd(), "completer", "completer_linux")
             
 
         if os.name == "nt":
@@ -135,7 +138,8 @@ def toggle_script():
 
     root.after(1200, lambda: after_tasks()) # Wait long enough to execute/terminate script
 
-Button(root, text="Add shortcut", command=add_shortcut).pack(pady=(0, 40))
+add_sh_btn = Button(root, text="Add shortcut", command=add_shortcut)
+add_sh_btn.pack(pady=(0, 40))
 
 toggle_btn = Button(root, text="Toggle TextCompleter", command=toggle_script)
 toggle_btn.pack(pady=(0, 10))
