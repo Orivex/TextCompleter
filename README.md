@@ -13,5 +13,6 @@ Extract the ZIP as you always do
 ### Step 3
 Open the folder "program" and either double-click main_windows.exe or main_linux depending on your Operating System
 
-### Step 4
-There is no step 4. Have fun!
+## USAGE
+
+Enter your shortcut and then press the "space" button
