@@ -5,13 +5,13 @@ Project for "Summer of Making" by Hackclub.
 # INSTALLATION GUIDE (VERY EASY)
 
 ### Step 1
-Click the green button "<> Code" above and then click "Download ZIP"
+Go to releases on the right
 
 ### Step 2
-Extract the ZIP as you always do
+Download main_windows.exe and completer_windows.exe OR main_linux and completer
 
 ### Step 3
-Open the folder "program" and either double-click main_windows.exe or main_linux depending on your Operating System
+Double click main_windows.exe or main_linux
 
 ## USAGE
 
