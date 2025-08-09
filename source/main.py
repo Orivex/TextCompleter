@@ -122,10 +122,10 @@ def toggle_script():
 
     else:
         if(os.name == "nt"):
-            path = os.path.join(os.getcwd(), "completer", "completer_windows.exe") # Working with .exe files
+            path = os.path.join(os.getcwd(), "completer_windows.exe") # Working with .exe files
             # path = os.path.join(os.getcwd(), "completer.py") # Working with .py files
         else:
-            path = os.path.join(os.getcwd(), "completer", "completer_linux")
+            path = os.path.join(os.getcwd(), "completer_linux")
             
 
         if os.name == "nt":
